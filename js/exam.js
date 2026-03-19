@@ -1,28 +1,53 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Thi</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+let license = localStorage.getItem("license");
+let config = examConfig[license];
 
-<div class="container">
-  <div class="timer">⏱ <span id="time"></span></div>
+let pool = shuffle(getByLicense(license));
+let questions = pool.slice(0, config.total);
 
-  <h3 id="index"></h3>
-  <h2 id="question"></h2>
+let current = 0;
+let answers = [];
+let time = config.time * 60;
 
-  <div id="answers"></div>
+function load(){
+  let q = questions[current];
 
-  <button onclick="next()">Tiếp</button>
-  <button onclick="submitExam()">Nộp bài</button>
-</div>
+  document.getElementById("index").innerText = `Câu ${current+1}`;
+  document.getElementById("question").innerText = q.question;
 
-<script src="js/questions.js"></script>
-<script src="js/config.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/exam.js"></script>
+  let html = "";
+  q.answers.forEach((a,i)=>{
+    html += `<button onclick="choose(${i})">${a}</button>`;
+  });
 
-</body>
-</html>
+  document.getElementById("answers").innerHTML = html;
+}
+
+function choose(i){
+  answers[current] = i;
+}
+
+function next(){
+  if(current < questions.length-1){
+    current++;
+    load();
+  }
+}
+
+function submitExam(){
+  localStorage.setItem("answers", JSON.stringify(answers));
+  localStorage.setItem("questions", JSON.stringify(questions));
+  localStorage.setItem("license", license);
+  location.href = "result.html";
+}
+
+// timer
+setInterval(()=>{
+  time--;
+  let m = Math.floor(time/60);
+  let s = time%60;
+  document.getElementById("time").innerText = `${m}:${s<10?"0"+s:s}`;
+
+  if(time<=0) submitExam();
+},1000);
+
+load();
