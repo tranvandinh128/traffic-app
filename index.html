@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Thi GPLX</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>Thi GPLX</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <h1>🚦 Thi thử 600 câu GPLX</h1>
+<div class="container">
+  <h1>🚦 Thi GPLX</h1>
 
-  <button onclick="startExam()">Bắt đầu thi</button>
+  <select id="license">
+    <option value="A1">A1</option>
+    <option value="A2">A2</option>
+    <option value="B1">B1</option>
+    <option value="B2">B2</option>
+  </select>
 
-  <script>
-    function startExam() {
-      window.location.href = "quiz.html";
-    }
-  </script>
+  <button onclick="startExam()">Thi thử</button>
+  <button onclick="goReview()">Ôn tập</button>
+</div>
+
+<script>
+function startExam(){
+  localStorage.setItem("license", document.getElementById("license").value);
+  location.href = "exam.html";
+}
+
+function goReview(){
+  localStorage.setItem("license", document.getElementById("license").value);
+  location.href = "review.html";
+}
+</script>
 
 </body>
 </html>
